@@ -1,7 +1,6 @@
 const { get } = require("https");
 const { Server } = require("http");
 const server = Server();
-const cache = new Map();
 
 function update () {
 	return new Promise((res, rej) => {
@@ -18,7 +17,7 @@ function update () {
 			stream.on('end', () => {
 				let result = Buffer.concat(ArrayBuffer).toString("utf-8");
 				delete ArrayBuffer;
-				cache.clear();
+				ban.cache.clear();
 
 				result.split("\n").forEach(data => {
 					if (!data || !data.length) {
@@ -34,21 +33,21 @@ function update () {
 						return false;
 					}
 					let reason = splitted.join(" ");
-					if (!cache.has(id)) cache.set(id, []);
-					cache.get(id).push(reason);
+					if (!ban.cache.has(id)) ban.cache.set(id, []);
+					ban.cache.get(id).push(reason);
 					delete reason;
 					delete splitted;
 					delete id;
 					delete data;
 				});
 
-				res(cache);
+				res(ban.cache);
 				delete result;
 			});
 		}).on('error', async () => res(await update()));
 	});
 }
 
-module.exports = {
-	update, cache
-}
+ban.cache = new Map();
+
+module.exports = update;
