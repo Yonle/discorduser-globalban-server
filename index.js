@@ -2,14 +2,14 @@ const { get } = require("https");
 const { Server } = require("http");
 const server = Server();
 
-function update () {
+function ban () {
 	return new Promise((res, rej) => {
 		get({
 			hostname: "yonle.github.io",
 			path: "/discorduser-globalban/list"
 		}, stream => {
 			let ArrayBuffer = [];
-			stream.on('error', async () => res(await update()));
+			stream.on('error', async () => res(await ban()));
 			stream.on('data', data => {
 				ArrayBuffer.push(data);
 			});
@@ -44,10 +44,10 @@ function update () {
 				res(ban.cache);
 				delete result;
 			});
-		}).on('error', async () => res(await update()));
+		}).on('error', async () => res(await ban()));
 	});
 }
 
 ban.cache = new Map();
 
-module.exports = update;
+module.exports = ban;
