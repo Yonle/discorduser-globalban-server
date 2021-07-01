@@ -55,7 +55,7 @@ server.on('request', (req, res) => {
 		console.log(id)
 		if (!id.length || isNaN(id)) {
 			res.status = 400;
-			return res.end(JSON.stringify({ message: "Invalid ID", code: "INV_ID" }));
+			return res.end(JSON.stringify({ message: "Invalid User ID", code: "INV_USER_ID" }));
 		} else if (!cache.has(id)) {
 			res.status = 400;
 			return res.end(JSON.stringify({ message: "Not available", code: "NOT_AVAILABLE" }));
