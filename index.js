@@ -49,28 +49,6 @@ function update () {
 	});
 }
 
-server.on('request', (req, res) => {
-	if (req.url.startsWith("/check/")) {
-		let id = req.url.slice("/check/".length);
-		console.log(id)
-		if (!id.length || isNaN(id)) {
-			res.status = 400;
-			return res.end(JSON.stringify({ message: "Invalid User ID", code: "INV_USER_ID" }));
-		}
-		if (!cache.size) await update();
-		if (!cache.has(id)) {
-			res.status = 400;
-			return res.end(JSON.stringify({ message: "Not available", code: "NOT_AVAILABLE" }));
-		} else {
-			return res.end(JSON.stringify(cache.get(id)));
-		}
-	} else {
-		res.end("Endpoint: /check/[UserID]");
-	}
-});
-
-const listener = server.listen(process.env.PORT || 8080, async () => {
-	console.log(`Listening on port`, listener.address().port);
-	setInterval(update, 1000 * 60);
-	update();
-});
+module.exports = {
+	update, cache
+}
